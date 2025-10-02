@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+/**
+ * Represents a payment request containing card details, amount of money, and merchant ID.
+ */
 @Value
 @Builder
 public class PaymentRequest {
@@ -13,6 +16,14 @@ public class PaymentRequest {
     @NonNull Money money;
     @NonNull String merchantId;
 
+    /**
+     * Private constructor to enforce validation rules.
+     *
+     * @param card       the card details
+     * @param money      the amount of money
+     * @param merchantId the merchant identifier
+     * @throws IllegalArgumentException if merchantId is blank
+     */
     private PaymentRequest(CardDetails card, Money money, String merchantId) {
         if (merchantId.isBlank()) {
             throw new IllegalArgumentException("Merchant ID must not be blank");

@@ -1,4 +1,4 @@
-package com.example.psp.domain.services.transaction;
+package com.example.psp.service.transaction.ports;
 
 import com.example.psp.domain.enums.TransactionStatus;
 import lombok.Builder;

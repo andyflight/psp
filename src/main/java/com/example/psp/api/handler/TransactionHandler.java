@@ -44,14 +44,15 @@ public class TransactionHandler {
      */
     public Mono<ServerResponse> processTransaction(ServerRequest request) {
         return request.bodyToMono(TransactionRequestDto.class)
-                .doOnNext(dto -> log.info("Received transaction request: {}", dto))
+                .doOnNext(dto -> log.info("Received transaction request for merchant ID: {}, with amount {} {}", dto.getMerchantId(), dto.getAmount(), dto.getCurrencyCode()))
                 .flatMap(this::validateRequest)
                 .map(this::mapToPaymentRequest)
                 .flatMap(transactionService::processPayment)
                 .doOnNext(response -> log.info("Transaction request processed: {}", response))
                 .map(this::mapToTransactionResponseDto)
                 .flatMap(responseDto -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(responseDto))
-                .doOnSuccess(responseDto -> log.info("Transaction successfully processed with status code: {}", responseDto.statusCode()));
+                .doOnSuccess(responseDto -> log.info("Transaction successfully processed with status code: {}", responseDto.statusCode()))
+                .doOnError(error -> log.error("Error processing transaction: {}", error.getMessage(), error));
     }
 
     private TransactionResponseDto mapToTransactionResponseDto(PaymentResponse response) {

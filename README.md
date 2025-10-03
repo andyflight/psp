@@ -28,6 +28,11 @@ The architecture is designed with DDD principles in mind, separating concerns in
     - Entities: core business objects with identity (Transaction)
     - Value Objects: immutable objects representing concepts (Money, CardDetails, StoredCardInfo)
     - enums: fixed sets of constants (TransactionStatus, AcquirerType, AcquirerDecision)
+- WebFlux
+    - Functional routing: defining routes using RouterFunction (TransactionRouterFunction)
+    - Reactive handlers: handling requests reactively (TransactionHandler)
+    - Reactive types: using Mono and Flux for async processing
+    - exception handling: centralized error handling (GlobalExceptionHandler, GlobalErrorAttributes)
 - Patterns used:
     - Factory/static initializers enforce invariants (Transaction.initialize, StoredCardInfo.of)
     - Builder using Lombok on top of value objects (Money, CardDetails) and application objects (PaymentRequest, PaymentResponse)
@@ -38,54 +43,55 @@ The architecture is designed with DDD principles in mind, separating concerns in
 
 ### Project Structure
 ```text
+.
+├── api/
+│   ├── dto/
+│   │   └── transaction
+│   ├── handler/
+│   │   └── TransactionHandler
+│   └── router/
+│       └── TransactionRouterFunction
+├── config/
+│   └── ClockConfig
 ├── domain/
 │   ├── entities/
-│   │   └── Transaction.java
+│   │   └── Transaction
 │   ├── enums/
-│   │   ├── TransactionStatus.java
-│   │   ├── AcquirerType.java
-│   │   └── AcquirerDecision.java
+│   │   ├── AcquirerDecision
+│   │   ├── AcquirerType
+│   │   └── TransactionStatus
 │   └── valueobjects/
-│       ├── CardDetails.java
-│       ├── Money.java
-│       └── StoredCardInfo.java
-├── service/
-│   ├── acquirer/
-│   │   ├── impl/
-│   │   │   ├── AcquirerRouterImpl.java
-│   │   │   ├── AcquirerA.java
-│   │   │   └── AcquirerB.java
-│   │   └── ports/
-│   │       ├── Acquirer.java
-│   │       └── AcquirerRouter.java
-│   └── transaction/
-│       ├── impl/
-│       │   └── TransactionServiceImpl.java
-│       └── ports/
-│           ├── PaymentRequest.java
-│           ├── PaymentResponse.java
-│           └── TransactionService.java
+│       ├── StoredCardInfo
+│       ├── Money
+│       └── CardDetails
+├── exception/
+│   └── handler/
+│       ├── GlobalExceptionHandler
+│       └── GlobalErrorAttributes
 ├── repository/
 │   └── transaction/
 │       ├── impl/
-│       │   └── InMemoryTransactionRepositoryImpl.java
-│       └── TransactionRepository.java
-├── web/
-│   ├── router/
-│   │   └── TransactionRouterFunction.java
-│   ├── handler/
-│   │   └── TransactionHandler.java
-│   └── dto/
-│       ├── TransactionRequestDto.java
-│       └── TransactionResponseDto.java
+│       │   └── InMemoryTransactionRepositoryImpl
+│       └── TransactionRepository
+├── service/
+│   ├── acquirer/
+│   │   ├── impl/
+│   │   │   ├── AcquirerA
+│   │   │   ├── AcquirerB
+│   │   │   └── AcquirerRouterImpl
+│   │   └── ports/
+│   │       ├── Acquirer
+│   │       └── AcquirerRouter
+│   └── transaction/
+│       ├── impl/
+│       │   └── TransactionServiceImpl
+│       └── ports/
+│           ├── PaymentRequest
+│           ├── PaymentResponse
+│           └── TransactionService
 ├── shared/
-│   └── CardValidation.java
-├── utility/
-│   ├── GlobalExceptionHandler.java
-│   ├── CreditCard.java
-│   └── CreditCardValidator.java
-└── config/
-    └── ClockConfig.java
+│   └── CardValidation
+└── PspApplication
 ```
 
 #### Running the Application

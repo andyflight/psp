@@ -75,9 +75,9 @@ public class TransactionServiceImpl implements TransactionService {
                             .transactionStatus(tnx.getStatus())
                             .message("Transaction for merchant " + tnx.getMerchantId() + " is " + tnx.getStatus())
                             .build()
-                    )
+                    ))
                     .doOnSuccess(resp -> log.info("Payment processed: transactionId={}, status={}", resp.getTransactionId(), resp.getTransactionStatus()))
-                    .doOnError(err -> log.error("Error processing payment for merchantId={}: {}", paymentDetails.getMerchantId(), err.getMessage(), err)));
+                    .doOnError(err -> log.error("Error processing payment for merchantId={}: {}", paymentDetails.getMerchantId(), err.getMessage(), err));
         });
     }
 }

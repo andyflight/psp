@@ -7,8 +7,11 @@ import lombok.extern.jackson.Jacksonized;
 import org.hibernate.validator.constraints.CreditCardNumber;
 import org.hibernate.validator.constraints.Currency;
 
+/**
+ * DTO representing a transaction request.
+ */
 @Jacksonized
-@Builder()
+@Builder
 @Value
 public class TransactionRequestDto {
 

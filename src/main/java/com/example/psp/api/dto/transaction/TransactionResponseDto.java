@@ -4,6 +4,9 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
+/**
+ * DTO representing the response after processing a transaction.
+ */
 @Jacksonized
 @Builder
 @Value

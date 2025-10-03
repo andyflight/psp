@@ -12,6 +12,15 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.UUID;
 
+
+/**
+ * Represents a payment transaction in the system.
+ * <p>
+ * This entity encapsulates all relevant information about a transaction,
+ * including card details, amount, status, acquirer information, and timestamps.
+ * <p>
+ * The transaction lifecycle is managed through status updates based on acquirer decisions.
+ */
 @Getter
 @EqualsAndHashCode(of = "id")
 public class Transaction {
@@ -50,7 +59,16 @@ public class Transaction {
         this.updatedAt = updatedAt;
     }
 
-
+    /**
+     * Initializes a new Transaction with the provided details.
+     *
+     * @param card       The card details used for the transaction.
+     * @param money      The monetary amount of the transaction.
+     * @param merchantId The identifier of the merchant initiating the transaction.
+     * @param now        The current timestamp for creation and update fields.
+     * @return A new Transaction instance with status set to PENDING.
+     * @throws NullPointerException if any of the parameters are null.
+     */
     public static Transaction initialize(@NonNull CardDetails card,
                                          @NonNull Money money,
                                          @NonNull String merchantId,
@@ -68,7 +86,17 @@ public class Transaction {
         );
     }
 
-
+    /**
+     * Initializes a new Transaction with the provided details, using the provided Clock to obtain the current time.
+     *
+     * @param card       The card details used for the transaction.
+     * @param money      The monetary amount of the transaction.
+     * @param merchantId The identifier of the merchant initiating the transaction.
+     * @param clock      The clock to obtain the current time.
+     * @return A new Transaction instance with status set to PENDING.
+     * @throws NullPointerException if any of the parameters are null.
+     * @see #initialize(CardDetails, Money, String, Instant)
+     */
     public static Transaction initialize(@NonNull CardDetails card,
                                          @NonNull Money money,
                                          @NonNull String merchantId,
@@ -79,6 +107,15 @@ public class Transaction {
     }
 
 
+    /**
+     * Updates the transaction status based on the acquirer's decision.
+     *
+     * @param decision The decision made by the acquirer (APPROVED or DENIED).
+     * @param acquirer The type of acquirer that processed the transaction.
+     * @param now      The current timestamp for the update field.
+     * @throws IllegalStateException if the current status is not PENDING.
+     * @throws NullPointerException  if any of the parameters are null.
+     */
     public void updateStatus(@NonNull AcquirerDecision decision,
                              @NonNull AcquirerType acquirer,
                              @NonNull Instant now) {
@@ -96,6 +133,16 @@ public class Transaction {
         this.updatedAt = now;
     }
 
+    /**
+     * Updates the transaction status based on the acquirer's decision, using the provided Clock to obtain the current time.
+     *
+     * @param decision The decision made by the acquirer (APPROVED or DENIED).
+     * @param acquirer The type of acquirer that processed the transaction.
+     * @param clock    The clock to obtain the current time.
+     * @throws IllegalStateException if the current status is not PENDING.
+     * @throws NullPointerException  if any of the parameters are null.
+     * @see #updateStatus(AcquirerDecision, AcquirerType, Instant)
+     */
     public void updateStatus(@NonNull AcquirerDecision decision,
                              @NonNull AcquirerType acquirer,
                              @NonNull Clock clock

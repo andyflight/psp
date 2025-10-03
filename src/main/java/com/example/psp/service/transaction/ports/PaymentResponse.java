@@ -7,6 +7,9 @@ import lombok.Value;
 
 import java.util.UUID;
 
+/**
+ * Represents the response after processing a payment transaction.
+ */
 @Value
 @Builder
 public class PaymentResponse {

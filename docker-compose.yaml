@@ -1,7 +1,9 @@
 
 services:
   psp:
-    build: .
+    build:
+        context: .
+        dockerfile: Dockerfile
     image: psp-app:latest
     container_name: psp
     restart:

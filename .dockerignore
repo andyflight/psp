@@ -1,10 +1,25 @@
-.gradle
-.idea
-build
-*.md
+# Reduce Docker build context size by excluding files not needed for the image
+# VCS
 .git
 .gitignore
-.gitattributes
-docker-compose.yaml
-Dockerfile
+
+# IDE / project files
+.idea
+*.iml
+
+# Local build caches and outputs
+.gradle
+build
+out
+target
+
+# Tests and docs are not needed to build the runtime image
+src/test/
+docs/
+
+# Scripts and helpers not needed in image
+gradlew
 gradlew.bat
+
+# Compose file itself not needed in build context
+docker-compose.yaml

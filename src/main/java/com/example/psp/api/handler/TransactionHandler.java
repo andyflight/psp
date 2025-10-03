@@ -23,6 +23,9 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Currency;
 
+/**
+ * Handler for processing transaction requests.
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -32,6 +35,13 @@ public class TransactionHandler {
     private final Validator validator;
     private final Clock clock;
 
+    /**
+     * Processes a transaction request.
+     * Handles POST: /api/v1/transactions
+     *
+     * @param request the server request containing the transaction details
+     * @return a Mono emitting the server response with the transaction result
+     */
     public Mono<ServerResponse> processTransaction(ServerRequest request) {
         return request.bodyToMono(TransactionRequestDto.class)
                 .doOnNext(dto -> log.info("Received transaction request: {}", dto))

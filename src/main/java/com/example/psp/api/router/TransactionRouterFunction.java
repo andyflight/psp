@@ -9,6 +9,9 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+/**
+ * Router function for handling transaction-related API endpoints.
+ */
 @Configuration
 public class TransactionRouterFunction {
 

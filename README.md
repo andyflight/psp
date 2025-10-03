@@ -19,6 +19,7 @@ The architecture is designed with DDD principles in mind, separating concerns in
 - Reactive: using WebFlux allows handling many concurrent requests efficiently.
 - Validation: Jakarta Validation ensures input data integrity.
 - Lombok: reduces boilerplate code for data classes.
+- JUnit, Mockito and Reactor Test: comprehensive testing of components.
 
 ### Architecture
 - Hexagonal principles
@@ -44,54 +45,64 @@ The architecture is designed with DDD principles in mind, separating concerns in
 ### Project Structure
 ```text
 .
-├── api/
-│   ├── dto/
-│   │   └── transaction
-│   ├── handler/
-│   │   └── TransactionHandler
-│   └── router/
-│       └── TransactionRouterFunction
-├── config/
-│   └── ClockConfig
-├── domain/
-│   ├── entities/
-│   │   └── Transaction
-│   ├── enums/
-│   │   ├── AcquirerDecision
-│   │   ├── AcquirerType
-│   │   └── TransactionStatus
-│   └── valueobjects/
-│       ├── StoredCardInfo
-│       ├── Money
-│       └── CardDetails
-├── exception/
-│   └── handler/
-│       ├── GlobalExceptionHandler
-│       └── GlobalErrorAttributes
-├── repository/
-│   └── transaction/
-│       ├── impl/
-│       │   └── InMemoryTransactionRepositoryImpl
-│       └── TransactionRepository
-├── service/
-│   ├── acquirer/
-│   │   ├── impl/
-│   │   │   ├── AcquirerA
-│   │   │   ├── AcquirerB
-│   │   │   └── AcquirerRouterImpl
-│   │   └── ports/
-│   │       ├── Acquirer
-│   │       └── AcquirerRouter
-│   └── transaction/
-│       ├── impl/
-│       │   └── TransactionServiceImpl
-│       └── ports/
-│           ├── PaymentRequest
-│           ├── PaymentResponse
-│           └── TransactionService
-├── shared/
-│   └── CardValidation
-└── PspApplication
+├── main/
+│   ├── java/
+│   │   └── com.example.psp/
+│   │       ├── api/
+│   │       │   ├── dto/
+│   │       │   │   └── transaction
+│   │       │   ├── handler/
+│   │       │   │   └── TransactionHandler
+│   │       │   └── router/
+│   │       │       └── TransactionRouterFunction
+│   │       ├── config/
+│   │       │   └── ClockConfig
+│   │       ├── domain/
+│   │       │   ├── entities/
+│   │       │   │   └── Transaction
+│   │       │   ├── enums/
+│   │       │   │   ├── AcquirerDecision
+│   │       │   │   ├── AcquirerType
+│   │       │   │   └── TransactionStatus
+│   │       │   └── valueobjects/
+│   │       │       ├── StoredCardInfo
+│   │       │       ├── Money
+│   │       │       └── CardDetails
+│   │       ├── exception/
+│   │       │   └── handler/
+│   │       │       ├── GlobalExceptionHandler
+│   │       │       └── GlobalErrorAttributes
+│   │       ├── repository/
+│   │       │   └── transaction/
+│   │       │       ├── impl/
+│   │       │       │   └── InMemoryTransactionRepositoryImpl
+│   │       │       └── TransactionRepository
+│   │       ├── service/
+│   │       │   ├── acquirer/
+│   │       │   │   ├── impl/
+│   │       │   │   │   ├── AcquirerA
+│   │       │   │   │   ├── AcquirerB
+│   │       │   │   │   └── AcquirerRouterImpl
+│   │       │   │   └── ports/
+│   │       │   │       ├── Acquirer
+│   │       │   │       └── AcquirerRouter
+│   │       │   └── transaction/
+│   │       │       ├── impl/
+│   │       │       │   └── TransactionServiceImpl
+│   │       │       └── ports/
+│   │       │           ├── PaymentRequest
+│   │       │           ├── PaymentResponse
+│   │       │           └── TransactionService
+│   │       ├── shared/
+│   │       │   └── CardValidation
+│   │       └── PspApplication
+│   └── resources/
+│       └── application.properties
+└── test/
+    └── java/
+        └── com.example.psp/
+            └── service/
+                └── AcquirerRouterTest
 ```
 
 #### Running the Application
@@ -103,3 +114,4 @@ The architecture is designed with DDD principles in mind, separating concerns in
    docker-compose up --build
    ```
 5. The application will be accessible at `http://localhost:8080`.
+6. See `http://localhost:8080/swagger-ui.html` for API documentation

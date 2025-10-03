@@ -23,7 +23,7 @@ public class AcquirerRouterImpl implements AcquirerRouter {
 
     @Override
     public Mono<Acquirer> getAcquirer(@NonNull CardDetails cardDetails) {
-        return Mono.fromCallable(() -> {
+        return Mono.fromSupplier(() -> {
             String bin = cardDetails.getBIN();
             AcquirerType type = calculateBinSum(bin) % 2 == 0 ? AcquirerType.ACQUIRER_A : AcquirerType.ACQUIRER_B;
             Acquirer acquirer =  acquirersCache.get(type);

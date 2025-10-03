@@ -20,9 +20,8 @@ public class AcquirerA implements Acquirer {
 
     @Override
     public Mono<AcquirerDecision> authorizeTransaction(@NonNull CardDetails cardDetails, @NonNull Money money) {
-        return Mono.just(cardDetails)
-                .map(details -> {
-                    String lastDigit = details.getLastDigit();
+        return Mono.fromSupplier(() -> {
+                    String lastDigit = cardDetails.getLastDigit();
                     return Integer.parseInt(lastDigit) % 2 == 0 ? AcquirerDecision.APPROVED : AcquirerDecision.DENIED;
                 });
     }

@@ -15,7 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * In-memory implementation of the TransactionRepository.
  * This implementation uses a ConcurrentHashMap to store transactions.
  */
-@Repository
+
+//@Repository
 @Slf4j
 public class InMemoryTransactionRepositoryImpl implements TransactionRepository {
 

@@ -27,7 +27,12 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    implementation 'org.liquibase:liquibase-core'
+    implementation 'org.springframework:spring-jdbc' // Liquibase needs JDBC for migration
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.9'
+    runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'org.postgresql:r2dbc-postgresql'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'

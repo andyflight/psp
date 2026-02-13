@@ -1,10 +1,16 @@
 
 services:
-  psp:
-    build: .
-    image: psp-app:latest
-    container_name: psp
-    restart:
-        unless-stopped
+  db:
+    image: postgres:17-alpine
+    restart: always
+    environment:
+      - POSTGRES_DB=transaction_db
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
     ports:
-        - "8080:8080"
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

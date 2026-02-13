@@ -47,6 +47,7 @@ public class Transaction {
                         Money money,
                         String merchantId,
                         TransactionStatus status,
+                        AcquirerType acquirerType,
                         Instant createdAt,
                         Instant updatedAt
                         ) {
@@ -55,8 +56,23 @@ public class Transaction {
         this.money = money;
         this.merchantId = merchantId;
         this.status = status;
+        this.acquirerType = acquirerType;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    /**
+     * Reconstructs a Transaction from persistent storage.
+     */
+    public static Transaction reconstruct(UUID id,
+                                          StoredCardInfo card,
+                                          Money money,
+                                          String merchantId,
+                                          TransactionStatus status,
+                                          AcquirerType acquirerType,
+                                          Instant createdAt,
+                                          Instant updatedAt) {
+        return new Transaction(id, card, money, merchantId, status, acquirerType, createdAt, updatedAt);
     }
 
     /**
@@ -81,6 +97,7 @@ public class Transaction {
                 money,
                 merchantId,
                 TransactionStatus.PENDING,
+                null,
                 now,
                 now
         );

@@ -12,6 +12,54 @@ The architecture is designed with DDD principles in mind, separating concerns in
 - Lombok
 - Jakarta Validation
 
+### Additional Technologies:
+- ECS logging
+- Graceful Shutdown
+- Actuator health check
+- env setup
+- liquibase for migrations
+
+#### Examle of ECS logging:
+
+```
+{"@timestamp":"2026-02-13T12:40:41.248345107Z","log":{"level":"INFO","logger":"org.springframework.boot.web.embedded.netty.NettyWebServer"},"process":{"pid":84281,"thread":{"name":"restartedMain"}},"service":{"name":"psp","node":{}},"message":"Netty started on port 8080 (http)","ecs":{"version":"8.11"}}
+{"@timestamp":"2026-02-13T12:40:41.271458437Z","log":{"level":"INFO","logger":"com.example.psp.PspApplication"},"process":{"pid":84281,"thread":{"name":"restartedMain"}},"service":{"name":"psp","node":{}},"message":"Started PspApplication in 7.782 seconds (process running for 9.045)","ecs":{"version":"8.11"}}
+```
+
+#### Example of Graceful Shutdown:
+```
+{"@timestamp":"2026-02-13T12:46:11.073681489Z","log":{"level":"INFO","logger":"org.springframework.boot.web.embedded.netty.GracefulShutdown"},"process":{"pid":84281,"thread":{"name":"SpringApplicationShutdownHook"}},"service":{"name":"psp","node":{}},"message":"Commencing graceful shutdown. Waiting for active requests to complete","ecs":{"version":"8.11"}}
+{"@timestamp":"2026-02-13T12:46:11.077296425Z","log":{"level":"INFO","logger":"org.springframework.boot.web.embedded.netty.GracefulShutdown"},"process":{"pid":84281,"thread":{"name":"netty-shutdown"}},"service":{"name":"psp","node":{}},"message":"Graceful shutdown complete","ecs":{"version":"8.11"}}
+
+Process finished with exit code 143 (interrupted by signal 15:SIGTERM)
+```
+
+#### Health Check
+Health check is available at GET: /actuator/health
+
+Example of UP status:
+![actuator-health-up.png](actuator-health-up.png)
+
+Example of DOWN status:
+![actuator-health-down.png](actuator-health-down.png)
+
+
+#### Environment
+For env setup you need to create .env file. The example is shown in the .env.example file
+
+```
+DB_HOST=localhost
+DB_NAME=transaction_db
+DB_PORT=5432
+DB_PASSWORD=postgres
+DB_USERNAME=postgres
+```
+
+If env file will be absent, the app will fallback to default params declared in application.properties
+
+#### Migrations
+All migrations are controlled by Liquibase. To add new migration you need to create new changeset and add it to changelog-master
+
 ### Why this design
 - Separation of concerns: domain core doesn’t depend on frameworks; adapters plug in later.
 - Testability: time is injected via Clock, value objects validate invariants on creation, and ports allow mocking.
@@ -42,76 +90,21 @@ The architecture is designed with DDD principles in mind, separating concerns in
     - Dependency Injection via Spring for wiring components together
     - Repository pattern for data access abstraction (TransactionRepository)
 
-### Project Structure
-```text
-.
-├── main/
-│   ├── java/
-│   │   └── com.example.psp/
-│   │       ├── api/
-│   │       │   ├── dto/
-│   │       │   │   └── transaction
-│   │       │   ├── handler/
-│   │       │   │   └── TransactionHandler
-│   │       │   └── router/
-│   │       │       └── TransactionRouterFunction
-│   │       ├── config/
-│   │       │   └── ClockConfig
-│   │       ├── domain/
-│   │       │   ├── entities/
-│   │       │   │   └── Transaction
-│   │       │   ├── enums/
-│   │       │   │   ├── AcquirerDecision
-│   │       │   │   ├── AcquirerType
-│   │       │   │   └── TransactionStatus
-│   │       │   └── valueobjects/
-│   │       │       ├── StoredCardInfo
-│   │       │       ├── Money
-│   │       │       └── CardDetails
-│   │       ├── exception/
-│   │       │   └── handler/
-│   │       │       ├── GlobalExceptionHandler
-│   │       │       └── GlobalErrorAttributes
-│   │       ├── repository/
-│   │       │   └── transaction/
-│   │       │       ├── impl/
-│   │       │       │   └── InMemoryTransactionRepositoryImpl
-│   │       │       └── TransactionRepository
-│   │       ├── service/
-│   │       │   ├── acquirer/
-│   │       │   │   ├── impl/
-│   │       │   │   │   ├── AcquirerA
-│   │       │   │   │   ├── AcquirerB
-│   │       │   │   │   └── AcquirerRouterImpl
-│   │       │   │   └── ports/
-│   │       │   │       ├── Acquirer
-│   │       │   │       └── AcquirerRouter
-│   │       │   └── transaction/
-│   │       │       ├── impl/
-│   │       │       │   └── TransactionServiceImpl
-│   │       │       └── ports/
-│   │       │           ├── PaymentRequest
-│   │       │           ├── PaymentResponse
-│   │       │           └── TransactionService
-│   │       ├── shared/
-│   │       │   └── CardValidation
-│   │       └── PspApplication
-│   └── resources/
-│       └── application.properties
-└── test/
-    └── java/
-        └── com.example.psp/
-            └── service/
-                └── AcquirerRouterTest
-```
-
 #### Running the Application
 1. Ensure you have Docker and Docker Compose installed.
 2. Clone the repository
 3. Navigate to the project directory.
-4. Build and run the application using Docker Compose:
+4. Setup database using Docker Compose:
    ```bash
-   docker-compose up --build
+   docker compose up -d
    ```
-5. The application will be accessible at `http://localhost:8080`.
-6. See `http://localhost:8080/swagger-ui.html` for API documentation
+5. Run application with console or your IDE
+  ```bash
+  ./gradlew bootRun
+  ```
+6. The application will be accessible at `http://localhost:8080`.
+7. See `http://localhost:8080/swagger-ui.html` for API documentation
+
+
+
+

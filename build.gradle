@@ -25,14 +25,24 @@ repositories {
 }
 
 dependencies {
+    implementation platform('org.testcontainers:testcontainers-bom:2.0.3')
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    implementation 'org.liquibase:liquibase-core'
+    implementation 'org.springframework:spring-jdbc' // Liquibase needs JDBC for migration
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.9'
+    runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'org.postgresql:r2dbc-postgresql'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
+    testImplementation 'org.testcontainers:junit-jupiter:1.21.4'
+    testImplementation 'org.testcontainers:postgresql:1.21.4'
+    testImplementation "org.testcontainers:testcontainers:2.0.3"
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

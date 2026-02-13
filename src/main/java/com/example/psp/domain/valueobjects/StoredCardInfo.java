@@ -10,7 +10,7 @@ import java.time.YearMonth;
  * This class is immutable and ensures that sensitive card details are not exposed.
  */
 @Value
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class StoredCardInfo {
 
     @NonNull String cardNumberMasked;

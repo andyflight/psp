@@ -1,7 +1,7 @@
 
 services:
   db:
-    image: postgres:17-alpine
+    image: postgres:16.4
     restart: unless-stopped
     environment:
     - POSTGRES_DB=transaction_db
